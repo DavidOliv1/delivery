@@ -1,6 +1,5 @@
-import Input from "./Input";
+import Input from "./inputs/Input";
 import { useForm } from "react-hook-form";
-import { CiSearch } from "react-icons/ci";
 
 const SearchInput = () => {
   const {
@@ -11,13 +10,11 @@ const SearchInput = () => {
 
   return (
     <div className="relative w-2/5 md:w-2/5 lg:w-4/12 flex flex-row items-center">
-      <div className="absolute left-3">
-        <CiSearch size={18} />
-      </div>
       <Input
+        search
+        placeholder="Buscar estabelecimentos"
+        className="rounded-full left-4"
         id="search"
-        className="pl-9"
-        placeholder="Pesquisar"
         register={register}
         errors={errors}
       />

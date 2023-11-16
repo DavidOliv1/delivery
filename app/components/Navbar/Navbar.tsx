@@ -1,18 +1,24 @@
 "use client";
 
+import { User } from "@prisma/client";
 import Container from "../Container";
-import Input from "../Input";
 import Search from "../SearchInput";
 import Logo from "./Logo";
+import UserMenu from "./UserMenu";
 
-const Navbar = () => {
+type NavbarProps = {
+  currentUser: User | null;
+};
+
+const Navbar = ({ currentUser }: NavbarProps) => {
   return (
     <div className="fixed z-10 w-full bg-white">
-      <div className="py-8 border-b-[1px] shadow-sm">
+      <div className="py-6 border-b-[1px]">
         <Container>
           <div className="flex flex-row items-center justify-between gap-6">
             <Logo />
             <Search />
+            <UserMenu currentUser={currentUser} />
           </div>
         </Container>
       </div>

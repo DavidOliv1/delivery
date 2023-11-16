@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
+import Button from "../Button";
 
 type ModalProps = {
   isOpen?: boolean;
@@ -32,7 +33,39 @@ const Modal = ({
 
   useEffect(() => {
     setShowModal(isOpen);
+    document.body.classList.add("overflow-hidden");
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
   }, [isOpen]);
+
+  const handleClose = useCallback(() => {
+    if (disabled) {
+      return;
+    }
+
+    setShowModal(false);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    if (disabled) {
+      return;
+    }
+
+    onSubmit();
+  }, [disabled, onSubmit]);
+
+  const handleSecondaryAction = useCallback(() => {
+    if (disabled || !secondaryAction) {
+      return;
+    }
+
+    secondaryAction();
+  }, [disabled, secondaryAction]);
 
   if (!isOpen) {
     return null;
@@ -48,8 +81,9 @@ const Modal = ({
           my-6
           mx-auto
           h-full
-          lg:h-auto
+          pt-3
           md:h-auto
+          md:p-0
         "
       >
         {/* CONTENT */}
@@ -85,12 +119,34 @@ const Modal = ({
               /* rounded-t */ className="flex items-center p-6 justify-center relative border-b-[1px]"
             >
               <button
-                /* border-0 */ className="p-1 hover:opacity-70 transition absolute left-9"
+                /* border-0 */ className="p-[6px] rounded-full hover:bg-neutral-100 hover:opacity-70 transition absolute left-9"
+                onClick={handleClose}
               >
                 <IoMdClose size={18} />
               </button>
               <div className="text-base font-semibold">{title}</div>
             </div>
+            {/* BODY */}
+            <div className="relative p-6 flex-auto">
+              {body}
+              <div className="flex flex-row items-center gap-4 w-full mt-6">
+                {secondaryActionLabel && secondaryAction && (
+                  <Button
+                    outline
+                    disabled={disabled}
+                    label={secondaryActionLabel}
+                    onClick={handleSecondaryAction}
+                  />
+                )}
+                <Button
+                  disabled={disabled}
+                  label={actionLabel}
+                  onClick={handleSubmit}
+                />
+              </div>
+            </div>
+            {/* FOOTER */}
+            <div className="flex flex-col gap-2 p-6 pt-0">{footer}</div>
           </div>
         </div>
       </div>

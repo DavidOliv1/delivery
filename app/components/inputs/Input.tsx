@@ -45,19 +45,18 @@ const Input = ({
       <input
         className={cn(
           "peer bg-white outline-none p-4 w-full border-[1px] border-neutral-300 focus:border-black rounded-md shadow-sm focus:shadow-md font-light text-sm transition disabled:opacity-70 disabled:cursor-not-allowed pl-4",
-          className,
           {
             "pl-11": search,
             "pt-6": floatingLabel,
             "border-rose-500": errors[id],
             "focus:border-rose-500": errors[id],
-          }
+          },
+          className
         )}
         id={id}
         type={type}
         disabled={disabled}
-        required={required}
-        {...register(id)}
+        {...register(id, { required })}
         placeholder={floatingLabel ? " " : placeholder}
         {...rest}
       />

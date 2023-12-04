@@ -8,6 +8,7 @@ import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { User } from "@prisma/client";
 import { signOut } from "next-auth/react";
+import usePlaceModal from "@/app/hooks/usePlaceModal";
 
 type UserMenuProps = {
   currentUser: User | null;
@@ -17,6 +18,7 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { onOpen: onRegisterModalOpen } = useRegisterModal();
   const { onOpen: onLoginModalOpen } = useLoginModal();
+  const { onOpen: onPlaceModalOpen } = usePlaceModal();
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -32,6 +34,11 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
     onLoginModalOpen();
   };
 
+  const onRegisterPlace = useCallback(() => {
+    setIsOpen(false);
+    onPlaceModalOpen();
+  }, []);
+
   return (
     <div className="relative">
       <div
@@ -44,11 +51,15 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-[40vw] md:w-[200px] right-0 top-12 bg-white text-sm overflow-hidden">
+        <div className="absolute rounded-xl shadow-md w-[40vw] md:w-[250px] right-0 top-12 bg-white text-sm overflow-hidden">
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
                 <MenuItem label="Meus pedidos" onClick={() => {}} />
+                <MenuItem
+                  label="Cadastre seu estabelecimento"
+                  onClick={onRegisterPlace}
+                />
                 <MenuItem label="Dados cadastrais" onClick={() => {}} />
                 <MenuItem label="Formas de pagamento" onClick={() => {}} />
                 <MenuItem label="Favoritos" onClick={() => {}} />

@@ -1,4 +1,5 @@
 import { IconType } from "react-icons";
+import { cn } from "../utils/cn";
 
 type ButtonProps = {
   label: string;
@@ -7,6 +8,7 @@ type ButtonProps = {
   outline?: boolean;
   small?: boolean;
   icon?: IconType;
+  className?: string;
 };
 
 const Button = ({
@@ -15,27 +17,21 @@ const Button = ({
   disabled,
   outline,
   small,
+  className,
   icon: Icon,
 }: ButtonProps) => {
   return (
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`
-    relative
-    disabled:opacity-70
-    disabled:cursor-not-allowed
-    rounded-lg
-    hover:opacity-80
-    w-full
-    border-[1px]
-    ${outline ? "bg-white" : "bg-violet-500"}
-    ${outline ? "border-violet-500" : "border-violet-500"}
-    ${outline ? "text-violet-500" : "text-white"}
-    ${small ? "py-1" : "py-3"}
-    ${small ? "text-sm" : "text-md"}
-    ${small ? "font-light" : "font-semibold"}
-  `}
+      className={cn(
+        "relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 w-full px-2 border-[1px] bg-violet-500 border-violet-500 text-white py-3 text-md font-semibold",
+        {
+          "bg-white border-violet-500 text-violet-500": outline,
+          "py-1 text-sm font-light": small,
+        },
+        className
+      )}
     >
       {Icon && (
         <Icon

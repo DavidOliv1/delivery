@@ -5,6 +5,7 @@ import Container from "../Container";
 import Search from "../SearchInput";
 import Logo from "./Logo";
 import UserMenu from "./UserMenu";
+import Categories from "./Categories";
 
 type NavbarProps = {
   currentUser: User | null;
@@ -22,6 +23,7 @@ const Navbar = ({ currentUser }: NavbarProps) => {
           </div>
         </Container>
       </div>
+      <Categories />
     </div>
   );
 };

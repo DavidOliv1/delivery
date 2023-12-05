@@ -2,7 +2,7 @@
 
 import usePlaceModal from "@/app/hooks/usePlaceModal";
 import Modal from "./Modal";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Heading from "../Heading";
 import { categories } from "../Navbar/Categories";
 import CategoryInput from "../inputs/CategoryInput";
@@ -11,6 +11,9 @@ import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerPlaceSchema } from "@/app/libs/types";
+import { IoMdAlert } from "react-icons/io";
 
 enum STEPS {
   CATEGORY = 0,
@@ -33,13 +36,18 @@ const RegisterPlaceModal = () => {
     watch,
     formState: { errors },
   } = useForm<FieldValues>({
+    resolver: zodResolver(registerPlaceSchema),
     defaultValues: {
       category: "",
       imageSrc: "",
-      title: "",
+      name: "",
       description: "",
     },
   });
+
+  useEffect(() => {
+    reset();
+  }, [reset, isOpen])
 
   const category = watch("category");
   const imageSrc = watch("imageSrc");
@@ -61,14 +69,12 @@ const RegisterPlaceModal = () => {
   }, []);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    if (step !== STEPS.DESCRIPTION) {
-      return onNext();
-    }
+    
 
     setIsLoading(true);
 
     try {
-      await axios.post("/api/places");
+      await axios.post("/api/places", data);
       router.refresh();
       reset();
       setStep(STEPS.CATEGORY);
@@ -81,7 +87,7 @@ const RegisterPlaceModal = () => {
   };
 
   let bodyContent = (
-    <div className="flex flex-col gap-8">
+    <div className="relative flex flex-col gap-8">
       <Heading title="Qual dessas categorias melhor descreve seu estabelecimento?" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto">
         {categories.map((item) => (
@@ -94,15 +100,22 @@ const RegisterPlaceModal = () => {
             />
           </div>
         ))}
+        {errors['category'] && (
+            <div className="absolute z-10 top-full flex flex-row items-center text-xs p-1 mt-2 text-rose-500 gap-1">
+              <IoMdAlert size={15} />
+              {`${errors?.['category'].message}`}
+            </div>
+          )}
       </div>
     </div>
   );
 
   if (step === STEPS.IMAGES) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
+      <div className="relative flex flex-col gap-8">
         <Heading title="Adicione uma imagem para seu estabelecimento" />
         <ImageUpload
+          error={errors.imageSrc}
           value={imageSrc}
           onChange={(value) => setCustomValue("imageSrc", value)}
         />
@@ -112,10 +125,10 @@ const RegisterPlaceModal = () => {
 
   if (step === STEPS.DESCRIPTION) {
     bodyContent = (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-7">
         <Heading title="Como você descreveria seu estabelecimento?" />
         <Input
-          id="title"
+          id="name"
           label="Nome"
           floatingLabel
           disabled={isLoading}
@@ -123,7 +136,6 @@ const RegisterPlaceModal = () => {
           errors={errors}
           required
         />
-        <hr />
         <Input
           id="description"
           label="Descrição"
@@ -142,7 +154,7 @@ const RegisterPlaceModal = () => {
       title="Cadastrar estabelecimento"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={step !== STEPS.DESCRIPTION ? onNext : handleSubmit(onSubmit)}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
       actionLabel={step === STEPS.DESCRIPTION ? "Cadastrar" : "Avançar"}
       secondaryActionLabel={step === STEPS.CATEGORY ? undefined : "Voltar"}

@@ -20,6 +20,7 @@ model User {
   createdAt DateTime @default(now())
 
   accounts Account[]
+  places Place[]
 }
 
 model Account {
@@ -43,12 +44,15 @@ model Account {
 
 model Place {
   id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
   name String
   description String
   imageSrc String
   category String
   createdAt DateTime @default(now())
   products Product[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Product {

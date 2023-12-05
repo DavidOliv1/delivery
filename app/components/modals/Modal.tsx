@@ -49,7 +49,7 @@ const Modal = ({
     setTimeout(() => {
       onClose();
     }, 300);
-  }, []);
+  }, [disabled, onClose]);
 
   const handleSubmit = useCallback(() => {
     if (disabled) {
@@ -72,7 +72,7 @@ const Modal = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#222222]/60 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 bg-[#222222]/60 flex items-center justify-center overflow-y-auto">
       <div
         className="
           relative
@@ -80,9 +80,8 @@ const Modal = ({
           md:max-w-[568px]
           my-6
           mx-auto
-          h-full
+          h-auto
           pt-3
-          md:h-auto
           md:p-0
         "
       >
@@ -129,7 +128,7 @@ const Modal = ({
             {/* BODY */}
             <div className="relative p-6 flex-auto">
               {body}
-              <div className="flex flex-row items-center gap-4 w-full mt-6">
+              <div className="flex flex-row items-center gap-4 w-full mt-10">
                 {secondaryActionLabel && secondaryAction && (
                   <Button
                     outline

@@ -14,3 +14,10 @@ export const signUpSchema = z
     message: "As senhas não correspondem. Por favor tente novamente.",
     path: ["confirmPassword"],
   });
+
+  export const registerPlaceSchema = z.object({
+    category: z.string().min(1, 'Selecione uma categoria para seu place.'),
+    imageSrc: z.string().min(1, 'Insira uma imagem que identifique seu estabelecimento.'),
+    name: z.string().min(1, 'Insira um nome para seu estabelecimento.'),
+    description: z.string().min(1, 'Insira uma descrição para seu estabelecimento.'),
+  })

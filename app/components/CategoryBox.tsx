@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { IconType } from "react-icons";
-import { cn } from "../utils/cn";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
-import queryString from "query-string";
+import { IconType } from 'react-icons';
+import { cn } from '../utils/cn';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
+import queryString from 'query-string';
 
 type CategoryBoxProps = {
   label: string;
@@ -28,16 +28,16 @@ const CategoryBox = ({ label, icon: Icon, selected }: CategoryBoxProps) => {
       category: label,
     };
 
-    if (params?.get("category") === label) {
+    if (params?.get('category') === label) {
       delete updatedQuery.category;
     }
 
     const url = queryString.stringifyUrl(
       {
-        url: "/",
+        url: '/',
         query: updatedQuery,
       },
-      { skipNull: true }
+      { skipNull: true },
     );
 
     router.push(url);
@@ -47,10 +47,10 @@ const CategoryBox = ({ label, icon: Icon, selected }: CategoryBoxProps) => {
     <div
       onClick={handleClick}
       className={cn(
-        "flex flex-col items-center justify-center gap-2 p-3 border-b-2 hover:text-neutral-800 transition cursor-pointer border-transparent text-neutral-500",
+        'flex flex-col items-center justify-center gap-2 p-3 border-b-2 hover:text-neutral-800 transition cursor-pointer border-transparent text-neutral-500',
         {
-          "border-b-neutral-800 text-neutral-800": selected,
-        }
+          'border-b-neutral-800 text-neutral-800': selected,
+        },
       )}
     >
       <Icon size={24} />

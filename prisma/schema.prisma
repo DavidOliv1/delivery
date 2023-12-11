@@ -18,6 +18,8 @@ model User {
   image String?
   hashedPassword String?
   createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+  favoriteIds String[] @db.ObjectId
 
   accounts Account[]
   places Place[]
@@ -50,6 +52,7 @@ model Place {
   imageSrc String
   category String
   createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
   products Product[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
